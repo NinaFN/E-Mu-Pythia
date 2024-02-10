@@ -9,7 +9,7 @@
 
 
 void read_sim_2D_emu_nocheck() {
-    TFile *f = TFile::Open("sim_tuples_pairs_nocheck_hardQCDall.root","READ");
+    TFile *f = TFile::Open("Data/sim_tuples_pairs_nocheck_hardQCDall.root","READ");
     
     
     vector<double> *binLuminocity;
@@ -68,26 +68,6 @@ void read_sim_2D_emu_nocheck() {
         
         //Fill Tuples
         emuTuples[binCount] = (TNtuple*)f->Get(Form("emu%d", binCount));
-
-
-        //calculations
-        /* double pairFoundBin = emuTuples[binCount]->GetEntries("etaE>=-0.9 && etaE<=0.9 && etaMu>=-4 && etaMu<=-2.5"); // && ptE>3 && ptMu>5
-        double pairPtBin = emuTuples[binCount]->GetEntries("ptE>3 && ptMu>5");
-        pairFoundTot+=pairFoundBin;
-        pairPtTot+=pairPtBin;
-
-
-        double pairBin = emuTuples[binCount]->GetEntries();
-        pairTot+=pairBin;
-
-        cout<<"Bin "<<binCount<<endl;
-        cout<<"Total pairs: "<<pairBin<<endl;
-        cout<<"Found pairs: "<<pairFoundBin<<endl;
-        cout<<"Ratio: "<<pairFoundBin/pairBin<<endl;
-
-        cout<<"Pt pairs: "<<pairPtBin<<endl;
-        cout<<"Ratio Pt: "<<pairPtBin/pairBin<<endl; */
-
 
         ////Fill Histograms
 
@@ -161,27 +141,16 @@ void read_sim_2D_emu_nocheck() {
 
 
 
-        /* emu2DPartTheta->Reset();
-        emuTuples[binCount]->Draw("pairTheta:thetaE>>emu_part_theta");
-        emu2DPartTheta->Scale(1/(*it),"width");
-        emu2DTheta->Add(emu2DPartTheta); */
 
 
 
         binCount++;
     }
-/*     cout<<endl;
-    cout<<"Total pairs: "<<pairTot<<endl;
-    cout<<"Found pairs: "<<pairFoundTot<<endl;
-    cout<<"Ratio: "<<pairFoundTot/pairTot<<endl;
-    cout<<"Pt pairs: "<<pairPtTot<<endl;
-    cout<<"Ratio Pt: "<<pairPtTot/pairTot<<endl;
- */
 
 
     ////Plotting
     // emus
-    TFile *outf =  new TFile("sim_hists_2D_emu_nocheck_hardQCDall_e3m5.root", "RECREATE");
+    TFile *outf =  new TFile("Hists/2D_emu_nocheck_hardQCDall_e3m5.root", "RECREATE");
 
     TCanvas *canvasEMUAll = new TCanvas("emu_all","emu_all");
     canvasEMUAll->Divide(3,1);

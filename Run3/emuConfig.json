@@ -1,0 +1,33 @@
+{
+    "internal-dpl-clock": "",
+    "internal-dpl-aod-reader": {
+        "time-limit": "0",
+        "orbit-offset-enumeration": "0",
+        "orbit-multiplier-enumeration": "0",
+        "start-value-enumeration": "0",
+        "end-value-enumeration": "-1",
+        "step-value-enumeration": "1",
+        "aod-file": "\/scratch\/nthnin001\/ReducedData\/TableMaker\/reducedAod_config6.root",
+        "aod-reader-json": "readerConfiguration_reducedEvent.json"
+    },
+    "barrel-selection": {
+        "cfgPrefilterCutId": "32",
+        "cfgQA": "false",
+        "cfgAddBarrelHistogram": "",
+        "cfgPtCut":"0",
+        "cfgPID":"false",
+        "cfgTPCCut":"3.0",
+        "cfgTOFCut":"3.0"
+    },
+    "muon-selection": {
+        "cfgPrefilterCutId": "32",
+        "cfgQA": "false",
+        "cfgAddMuonHistogram": "",
+        "cfgPtCut":"0"
+    },
+    "analysis-light": {
+        "cfgBins":"70"
+    },
+    "internal-dpl-injected-dummy-sink": "",
+    "internal-dpl-aod-global-analysis-file-sink": ""
+}

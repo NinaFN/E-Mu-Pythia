@@ -8,7 +8,7 @@
 //script to show the event classifications which describe how the heavy quark pair in each simulation decay
 
 void read_sim_quarkpairs_full() {
-    TFile *f = TFile::Open("sim_tuples_136_semilep_quarks_pairprod.root","READ");
+    TFile *f = TFile::Open("Data/sim_tuples_136_semilep_quarks_pairprod.root","READ");
     
     
     
@@ -25,15 +25,15 @@ void read_sim_quarkpairs_full() {
     int binCount = 0;
 
     //Create Hists
-    TH1F *quarkPtTotal = new TH1F("hf_full","Events that produce c#bar{c} or b#bar{b} pairs in Pythia HardQCD processes;#hat{p}_{T} (GeV/c);#frac{d#sigma}{d#hat{p}_{T}} (pb/GeV/c)", 20, 5.0, 60);
-    TH1F *quarkPtPart = new TH1F("quark_pt_part","", 20, 5.0, 60);
-    TH1F *quarkPt1 = new TH1F("quark_pt_1",";#hat{p}_{T} (GeV/c);Ratio", 20, 5.0, 60);
-    TH1F *quarkPt2 = new TH1F("quark_pt_2",";#hat{p}_{T} (GeV/c);Ratio", 20, 5.0, 60);
-    TH1F *quarkPt3 = new TH1F("quark_pt_3","", 20, 5.0, 60);
-    TH1F *quarkPt4 = new TH1F("quark_pt_4","", 20, 5.0, 60);
-    TH1F *quarkPt5 = new TH1F("quark_pt_5","", 20, 5.0, 60);
-    TH1F *quarkPt6 = new TH1F("quark_pt_6","", 20, 5.0, 60);
-    TH1F *quarkPt7 = new TH1F("quark_pt_7","", 20, 5.0, 60);
+    TH1F *quarkPtTotal = new TH1F("hf_full","Events that produce c#bar{c} or b#bar{b} pairs in Pythia HardQCD processes;#hat{p}_{T} (GeV/c);#frac{d#sigma}{d#hat{p}_{T}} (pb/GeV/c)", 20, 14.0, 60);
+    TH1F *quarkPtPart = new TH1F("quark_pt_part","", 20, 14.0, 60);
+    TH1F *quarkPt1 = new TH1F("quark_pt_1",";#hat{p}_{T} (GeV/c);Ratio", 20, 14.0, 60);
+    TH1F *quarkPt2 = new TH1F("quark_pt_2",";#hat{p}_{T} (GeV/c);Ratio", 20, 14.0, 60);
+    TH1F *quarkPt3 = new TH1F("quark_pt_3","", 20, 14.0, 60);
+    TH1F *quarkPt4 = new TH1F("quark_pt_4","", 20, 14.0, 60);
+    TH1F *quarkPt5 = new TH1F("quark_pt_5","", 20, 14.0, 60);
+    TH1F *quarkPt6 = new TH1F("quark_pt_6","", 20, 14.0, 60);
+    TH1F *quarkPt7 = new TH1F("quark_pt_7","", 20, 14.0, 60);
     
     double pairFoundTot = 0;
     double pairTot = 0;
@@ -43,84 +43,16 @@ void read_sim_quarkpairs_full() {
         //Fill Tuples
         quarkTuples[binCount] = (TNtuple*)f->Get(Form("quark%d", binCount));
 
-        /* //calculations
-        double pairFoundBin = quarkTuples[binCount]->GetEntries("decayMap>=5"); // && ptE>3 && ptMu>5
-        pairFoundTot+=pairFoundBin;
-
-
-        double pairBin = quarkTuples[binCount]->GetEntries();
-        pairTot+=pairBin; 
-
-        cout<<"Bin "<<binCount<<endl;
-        cout<<"Total pairs: "<<pairBin<<endl;
-        cout<<"Found pairs: "<<pairFoundBin<<endl;
-        cout<<"Ratio: "<<pairFoundBin/pairBin<<endl;  */
 
 
         ////Fill Histograms
 
-        /* double scaleErr =  sigmaErr[binCount] * (pow(10,9)/2e6);
-        //double* scaleErr = &err;
-        cout<<binCount<<endl;
-        cout<<scaleErr<<endl<<endl; */
-        
-
-        //Quarks
-        /*quarkPtPart->Reset();
-        quarkTuples[binCount]->Draw("pt1>>quark_pt_part");
-        quarkPtPart->Scale(1/(*it), "width");
-        quarkPtTotal->Add(quarkPtPart);
-
-        quarkPtPart->Reset();
-        quarkTuples[binCount]->Draw("pt1>>quark_pt_part","decayMap>=1 && decayMap!=2");
-        quarkPtPart->Scale(1/(*it), "width");
-        quarkPt1->Add(quarkPtPart);
-
-        quarkPtPart->Reset();
-        quarkTuples[binCount]->Draw("pt1>>quark_pt_part","decayMap>=2");
-        quarkPtPart->Scale(1/(*it), "width");
-        quarkPt2->Add(quarkPtPart);
-
-        quarkPtPart->Reset();
-        quarkTuples[binCount]->Draw("pt1>>quark_pt_part","decayMap>=3");
-        quarkPtPart->Scale(1/(*it), "width");
-        quarkPt3->Add(quarkPtPart);
-
-        quarkPtPart->Reset();
-        quarkTuples[binCount]->Draw("pt1>>quark_pt_part","decayMap>=4");
-        quarkPtPart->Scale(1/(*it), "width");
-        quarkPt4->Add(quarkPtPart);
-
-        quarkPtPart->Reset();
-        quarkTuples[binCount]->Draw("pt1>>quark_pt_part","decayMap>=5");
-        quarkPtPart->Scale(1/(*it), "width");
-        quarkPt5->Add(quarkPtPart);
-
-        quarkPtPart->Reset();
-        quarkTuples[binCount]->Draw("pt1>>quark_pt_part","decayMap>=6");
-        quarkPtPart->Scale(1/(*it), "width");
-        quarkPt6->Add(quarkPtPart);*/
       
         quarkPtPart->Reset();
         quarkTuples[binCount]->Draw("ptHat>>quark_pt_part");
         quarkPtPart->Scale(1/(*it), "width");
         quarkPtTotal->Add(quarkPtPart);
 
-        /* for (Int_t i = 0; i < quarkPtTotal->GetSumw2()->GetSize(); ++i){
-            if(quarkPtTotal->GetSumw2()->GetAt(i) != 0){
-                cout<<"delta h1 (sq): "<<quarkPtTotal->GetSumw2()->GetAt(i)<<endl;
-                cout<<"delta h2 (sq): "<<pow(scaleErr,2)<<endl;
-
-                double err2 = quarkPtTotal->GetSumw2()->GetAt(i) + pow(scaleErr,2);
-                cout<<"error (sq): "<<err2<<endl;
-                double err = sqrt(err2);
-                cout<<"error: "<<err<<endl;
-                quarkPtTotal->SetBinError(i, err);
-
-                cout<<"sumw2: "<<quarkPtTotal->GetSumw2()->GetAt(i)<<endl<<endl;
-            }
-
-        }  */
 
         quarkPtPart->Reset();
         quarkTuples[binCount]->Draw("ptHat>>quark_pt_part","decayMap>=1 && decayMap!=2");
@@ -160,32 +92,12 @@ void read_sim_quarkpairs_full() {
         binCount++;
     }
 
-    /*  cout<<endl;
-    cout<<"Total pairs: "<<pairTot<<endl;
-    cout<<"Found pairs: "<<pairFoundTot<<endl;
-    cout<<"Ratio: "<<pairFoundTot/pairTot<<endl; 
-
-
-    Double_t error_tot;
-    Double_t error_found;
-
-    Double_t integral_tot = quarkPtTotal->IntegralAndError(0,30,error_tot, "width");
-    Double_t integral_found = quarkPt5->IntegralAndError(0,30,error_found, "width");
-
-    cout<<endl;
-    cout<<"Total pairs (Integral): "<<integral_tot<<" +- "<<error_tot<<endl;
-    cout<<"Found pairs (Integral): "<<integral_found<<" +- "<<error_found<<endl;
-    
-    Double_t unc =  (integral_found/integral_tot) * sqrt( (pow((error_found/integral_found),2) + pow((error_tot/integral_tot),2)) );
-    cout<<"Ratio (Integral): "<<integral_found/integral_tot<<" +- "<<unc<<endl;
-
- */
 
 
     
     ////Plotting
     // Quarks
-    TFile *outf =  new TFile("A_quarkpairs_full_semilep.root", "RECREATE");
+    TFile *outf =  new TFile("Hists/quarkpairs_full_xcut.root", "RECREATE");
     TCanvas *canvasQuark = new TCanvas("Quark_sigma","Quark_sigma");
     
     TPad *pad1 = new TPad("pad1", "pad1", 0, 0.3, 1, 1.0);
@@ -277,18 +189,6 @@ void read_sim_quarkpairs_full() {
     quarkPt6->SetStats(0);
     quarkPt6->DrawCopy("SAME");
 
-    /* quarkPt6->Divide(quarkPtTotal);
-    quarkPt6->SetStats(0);
-    quarkPt6->DrawCopy("SAME"); */
-
-   /*  double intCalcQ1 = 0;
-    for(int j = 0; j != quarkPt2->GetSize(); ++j){
-        //cout<<qmPt->GetBinCenter(j)<<":\t"<<qmPt->GetAt(j)<<"+-"<<sqrt(qmPt->GetSumw2()->GetAt(j))<<endl;
-
-        intCalcQ1 += quarkPt2->GetAt(j);
-    } 
-    cout<<intCalcQ1<<endl;
-    cout<<intCalcQ1/30<<endl<<endl; */
 
     vector<double> ratio_events;
     vector<double> ratio_events_err;

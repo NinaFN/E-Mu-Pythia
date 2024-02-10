@@ -9,7 +9,7 @@
 
 
 void read_sim_1D_lepcheck() {
-    TFile *f = TFile::Open("sim_tuples_136_semilep_quarks_individual.root","READ");
+    TFile *f = TFile::Open("Data/sim_tuples_136_semilep_quarks_individual.root","READ");
     
     
     vector<double> *binLuminocity;
@@ -57,17 +57,17 @@ void read_sim_1D_lepcheck() {
         //Electron Decays
       
         qePart->Reset();
-        qeTuples[binCount]->Draw("ptL>>qe_part","semilepFlag==1 && etaL>=-0.9 && etaL<=0.9");// && etaQ<=1.6 && etaQ>=-1.6
+        qeTuples[binCount]->Draw("ptL>>qe_part","semilepFlag==1 && etaL>=-0.9 && etaL<=0.9  && ((idQ*idL)<0)");// && etaQ<=1.6 && etaQ>=-1.6
         qePart->Scale(1/(*it),"width");
         qeAll->Add(qePart); 
 
         qePart->Reset();
-        qeTuples[binCount]->Draw("ptL>>qe_part","semilepFlag==1 && etaQ<=1.6 && etaQ>=-1.6 && etaL>=-0.9 && etaL<=0.9");
+        qeTuples[binCount]->Draw("ptL>>qe_part","semilepFlag==1 && etaQ<=1.6 && etaQ>=-1.6 && etaL>=-0.9 && etaL<=0.9  && ((idQ*idL)<0)");
         qePart->Scale(1/(*it),"width");
         qeParentRange->Add(qePart);
 
         etaParte->Reset();
-        qeTuples[binCount]->Draw("etaQ>>eta_parte","etaL>=-0.9 && etaL<=0.9 && semilepFlag==1");
+        qeTuples[binCount]->Draw("etaQ>>eta_parte","etaL>=-0.9 && etaL<=0.9 && semilepFlag==1  && ((idQ*idL)<0)");
         etaParte->Scale(1/(*it),"width");
         qeParentEta->Add(etaParte);
 
@@ -75,17 +75,17 @@ void read_sim_1D_lepcheck() {
         // qm
 
         qmPart->Reset();
-        qmTuples[binCount]->Draw("ptL>>qm_part","semilepFlag==1 && etaL>=-4 && etaL<=-2.5");// && etaQ<=1.6 && etaQ>=-1.6
+        qmTuples[binCount]->Draw("ptL>>qm_part","semilepFlag==1 && etaL>=-4 && etaL<=-2.5  && ((idQ*idL)<0)");// && etaQ<=1.6 && etaQ>=-1.6
         qmPart->Scale(1/(*it),"width");
         qmAll->Add(qmPart); 
 
         qmPart->Reset();
-        qmTuples[binCount]->Draw("ptL>>qm_part","semilepFlag==1 && etaQ<=-2.1 && etaQ>=-4.4 && etaL>=-4 && etaL<=-2.5");
+        qmTuples[binCount]->Draw("ptL>>qm_part","semilepFlag==1 && etaQ<=-2.1 && etaQ>=-4.4 && etaL>=-4 && etaL<=-2.5  && ((idQ*idL)<0)");
         qmPart->Scale(1/(*it),"width");
         qmParentRange->Add(qmPart);
 
         etaPartm->Reset();
-        qmTuples[binCount]->Draw("etaQ>>eta_partm","etaL>=-4 && etaL<=-2.5 && semilepFlag==1");
+        qmTuples[binCount]->Draw("etaQ>>eta_partm","etaL>=-4 && etaL<=-2.5 && semilepFlag==1  && ((idQ*idL)<0)");
         etaPartm->Scale(1/(*it),"width");
         qmParentEta->Add(etaPartm);
 
@@ -96,7 +96,7 @@ void read_sim_1D_lepcheck() {
 
     ////Plotting
     // qes
-    TFile *outf =  new TFile("A_lepcheck.root", "RECREATE");
+    TFile *outf =  new TFile("Hists/lepcheck.root", "RECREATE");
 
     TCanvas *canvasQEAll = new TCanvas("qe_all","qe_all");
 

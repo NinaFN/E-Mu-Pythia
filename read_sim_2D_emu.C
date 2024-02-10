@@ -9,7 +9,7 @@
 
 
 void read_sim_2D_emu() {
-    TFile *f = TFile::Open("sim_tuples_136_semilep_paircheck.root","READ");
+    TFile *f = TFile::Open("Data/sim_tuples_136_semilep_paircheck_signs.root","READ");
     
     
     vector<double> *binLuminocity;
@@ -30,10 +30,10 @@ void read_sim_2D_emu() {
 
     //Create Hists
 
-    TH2F *qe2DPartEta = new TH2F("qe_part_eta","", 50, -8.0, 8.0, 50, -8.0, 8.0);
+    TH2F *qe2DPartEta = new TH2F("qe_part_eta","", 50, -6.0, 6.0, 50, -6.0, 6.0);
     TH2F *qe2DPartEtaSmall = new TH2F("qe_part_eta_small","", 20, -0.9, 0.9, 20, -4, -2.5);
-    TH2F *qe2DEta = new TH2F("qe_eta","#eta_{e} vs #eta_{#mu};#eta_{e};#eta_{#mu}", 50, -8.0, 8.0, 50, -8.0, 8.0);
-    TH2F *qe2DEtaCut = new TH2F("qe_eta_cut","#eta_{e} vs #eta_{#mu};#eta_{e};#eta_{#mu}", 50, -8.0, 8.0, 50, -8.0, 8.0);
+    TH2F *qe2DEta = new TH2F("qe_eta","#eta_{e} vs #eta_{#mu};#eta_{e};#eta_{#mu}", 50, -6.0, 6.0, 50, -6.0, 6.0);
+    TH2F *qe2DEtaCut = new TH2F("qe_eta_cut","#eta_{e} vs #eta_{#mu};#eta_{e};#eta_{#mu}", 50, -6.0, 6.0, 50, -6.0, 6.0);
     TH2F *qe2DEtaCut1 = new TH2F("qe_eta_cut1","#eta_{e} vs #eta_{#mu};#eta_{e};#eta_{#mu}", 20, -0.9, 0.9, 20, -4, -2.5);
     TH2F *qe2DEtaCut2 = new TH2F("qe_eta_cut2","#eta_{e} vs #eta_{#mu};#eta_{e};#eta_{#mu}", 20, -0.9, 0.9, 20, -4, -2.5);
 
@@ -58,14 +58,17 @@ void read_sim_2D_emu() {
     double pairPtTot = 0;
     double pairTot = 0;
 
-    TH2F *EtaPhiPart = new TH2F("eta_phi_part","", 50, -M_PI, M_PI, 50, -8.0, 8.0);
-    TH2F *qeEtaPhi = new TH2F("qe_eta_phi","#eta_{e} vs #phi_{e};#phi_{e};#eta_{e}",  50, -M_PI, M_PI, 50, -8.0, 8.0);
-    TH2F *qmEtaPhi = new TH2F("qm_eta_phi","#eta_{#mu} vs #phi_{#mu};#phi_{#mu};#eta_{#mu}",  50, -M_PI, M_PI, 50, -8.0, 8.0);
+    TH2F *EtaPhiPart = new TH2F("eta_phi_part","", 50, -M_PI, M_PI, 50, -6.0, 6.0);
+    TH2F *qeEtaPhi = new TH2F("qe_eta_phi","#eta_{e} vs #phi_{e};#phi_{e};#eta_{e}",  50, -M_PI, M_PI, 50, -6.0, 6.0);
+    TH2F *qmEtaPhi = new TH2F("qm_eta_phi","#eta_{#mu} vs #phi_{#mu};#phi_{#mu};#eta_{#mu}",  50, -M_PI, M_PI, 50, -6.0, 6.0);
 
-    TH2F *EtaPtPart = new TH2F("eta_pt_part","", 50, -8.0, 8.0, 50, 0.0, 10);   
-    TH2F *qeEtaPt = new TH2F("qe_eta_pt","#eta_{e} vs p_{T}^{e};#eta_{e};p_{T}^{e}", 50, -8.0, 8.0, 50, 0.0, 10);
-    TH2F *qmEtaPt = new TH2F("qm_eta_pt","#eta_{#mu} vs  p_{T}^{#mu};#eta_{#mu};p_{T}^{#mu}", 50, -8.0, 8.0, 50, 0.0, 10);
+    TH2F *EtaPtPart = new TH2F("eta_pt_part","", 50, -6.0, 6.0, 50, 0.0, 10);   
+    TH2F *qeEtaPt = new TH2F("qe_eta_pt","#eta_{e} vs p_{T}^{e};#eta_{e};p_{T}^{e}", 50, -6.0, 6.0, 50, 0.0, 10);
+    TH2F *qmEtaPt = new TH2F("qm_eta_pt","#eta_{#mu} vs  p_{T}^{#mu};#eta_{#mu};p_{T}^{#mu}", 50, -6.0, 6.0, 50, 0.0, 10);
 
+    TH2F *EtaPhiDiffPart = new TH2F("eta_phi_diff_part","", 50, -2*M_PI, 2*M_PI, 50, -6.0, 6.0);
+    TH2F *qeEtaPhiDiff = new TH2F("qe_eta_phi_diff","#Delta #eta vs #Delta #phi;#Delta #phi;#Delta #eta",  50, -2*M_PI, 2*M_PI, 50, -6.0, 6.0);
+    TH2F *qmEtaPhiDiff = new TH2F("qm_eta_phi_diff","#Delta #eta vs #Delta #phi;#Delta #phi;#Delta #eta",  50, -2*M_PI, 2*M_PI, 50, -6.0, 6.0);
 
 
     for(std::vector<double>::iterator it = binLuminocity->begin(); it != binLuminocity->end(); ++it){
@@ -73,16 +76,6 @@ void read_sim_2D_emu() {
         //Fill Tuples
         qmTuples[binCount] = (TNtuple*)f->Get(Form("qm%d", binCount));
         qmsTuples[binCount] = (TNtuple*)f->Get(Form("qms%d", binCount));
-
-        /* double pairFoundBin = qmsTuples[binCount]->GetEntries("semilepFlag==1 && pairSemilepFlag==1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5");
-        pairFoundTot+=pairFoundBin;
-
-        double pairBin = qmsTuples[binCount]->GetEntries("semilepFlag==1 && pairSemilepFlag==1");
-        pairTot+=pairBin;
-
-        cout<<"Bin "<<binCount<<endl;
-        cout<<"Total pairs: "<<pairBin<<endl;
-        cout<<"Found pairs: "<<pairFoundBin<<endl; */
  
     
         ////Fill Histograms
@@ -90,97 +83,99 @@ void read_sim_2D_emu() {
         //Electron Decays
 
         qe2DPartEta->Reset();
-        qmsTuples[binCount]->Draw("etaL:pairEta>>qe_part_eta","semilepFlag==1 && pairSemilepFlag==1");
+        qmsTuples[binCount]->Draw("etaL:pairEta>>qe_part_eta","semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14");
         qe2DPartEta->Scale(1/(*it),"width");
         qe2DEta->Add(qe2DPartEta);
 
         qe2DPartPt->Reset();
-        qmsTuples[binCount]->Draw("ptL:pairPt>>qe_part_pt","semilepFlag==1 && pairSemilepFlag==1");
+        qmsTuples[binCount]->Draw("ptL:pairPt>>qe_part_pt","semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14");
         qe2DPartPt->Scale(1/(*it),"width");
         qe2DPt->Add(qe2DPartPt);
 
         qe2DPartPhi->Reset();
-        qmsTuples[binCount]->Draw("phiL:pairPhi>>qe_part_phi","semilepFlag==1 && pairSemilepFlag==1");
+        qmsTuples[binCount]->Draw("phiL:pairPhi>>qe_part_phi","semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14");
         qe2DPartPhi->Scale(1/(*it),"width");
         qe2DPhi->Add(qe2DPartPhi);
 
 /////
 
         qe2DPartEta->Reset();
-        qmsTuples[binCount]->Draw("etaL:pairEta>>qe_part_eta","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1");
+        qmsTuples[binCount]->Draw("etaL:pairEta>>qe_part_eta","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1 && ptHat>=14");
         qe2DPartEta->Scale(1/(*it),"width");
         qe2DEtaCut->Add(qe2DPartEta);
 
         qe2DPartPt->Reset();
-        qmsTuples[binCount]->Draw("ptL:pairPt>>qe_part_pt","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1");
+        qmsTuples[binCount]->Draw("ptL:pairPt>>qe_part_pt","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1 && ptHat>=14");
         qe2DPartPt->Scale(1/(*it),"width");
         qe2DPtCut->Add(qe2DPartPt);
 
         qe2DPartPhi->Reset();
-        qmsTuples[binCount]->Draw("phiL:pairPhi>>qe_part_phi","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1");
+        qmsTuples[binCount]->Draw("phiL:pairPhi>>qe_part_phi","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1 && ptHat>=14");
         qe2DPartPhi->Scale(1/(*it),"width");
         qe2DPhiCut->Add(qe2DPartPhi);
 
 /////
 
         qe2DPartEtaSmall->Reset();
-        qmsTuples[binCount]->Draw("etaL:pairEta>>qe_part_eta_small","semilepFlag==1 && pairSemilepFlag==1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5");
+        qmsTuples[binCount]->Draw("etaL:pairEta>>qe_part_eta_small","semilepFlag==1 && pairSemilepFlag==1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5 && ptHat>=14");
         qe2DPartEtaSmall->Scale(1/(*it),"width");
         qe2DEtaCut1->Add(qe2DPartEtaSmall);
 
         qe2DPartPt->Reset();
-        qmsTuples[binCount]->Draw("ptL:pairPt>>qe_part_pt","semilepFlag==1 && pairSemilepFlag==1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5");
+        qmsTuples[binCount]->Draw("ptL:pairPt>>qe_part_pt","semilepFlag==1 && pairSemilepFlag==1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5 && ptHat>=14");
         qe2DPartPt->Scale(1/(*it),"width");
         qe2DPtCut1->Add(qe2DPartPt);
 
         qe2DPartPhi->Reset();
-        qmsTuples[binCount]->Draw("phiL:pairPhi>>qe_part_phi","semilepFlag==1 && pairSemilepFlag==1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5");
+        qmsTuples[binCount]->Draw("phiL:pairPhi>>qe_part_phi","semilepFlag==1 && pairSemilepFlag==1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5 && ptHat>=14");
         qe2DPartPhi->Scale(1/(*it),"width");
         qe2DPhiCut1->Add(qe2DPartPhi);
 
 /////
 
         qe2DPartEtaSmall->Reset();
-        qmsTuples[binCount]->Draw("etaL:pairEta>>qe_part_eta_small","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5");
+        qmsTuples[binCount]->Draw("etaL:pairEta>>qe_part_eta_small","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5 && ptHat>=14");
         qe2DPartEtaSmall->Scale(1/(*it),"width");
         qe2DEtaCut2->Add(qe2DPartEtaSmall);
 
         qe2DPartPt->Reset();
-        qmsTuples[binCount]->Draw("ptL:pairPt>>qe_part_pt","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5");
+        qmsTuples[binCount]->Draw("ptL:pairPt>>qe_part_pt","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5 && ptHat>=14");
         qe2DPartPt->Scale(1/(*it),"width");
         qe2DPtCut2->Add(qe2DPartPt);
 
         qe2DPartPhi->Reset();
-        qmsTuples[binCount]->Draw("phiL:pairPhi>>qe_part_phi","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5");
+        qmsTuples[binCount]->Draw("phiL:pairPhi>>qe_part_phi","semilepFlag==1 && pairSemilepFlag==1 && ptL>=3 && pairPt>=1 && pairEta>=-0.9 && pairEta<=0.9 && etaL>=-4 && etaL<=-2.5 && ptHat>=14");
         qe2DPartPhi->Scale(1/(*it),"width");
         qe2DPhiCut2->Add(qe2DPartPhi);
 
 ///////
 
         EtaPhiPart->Reset();
-        qmsTuples[binCount]->Draw("pairEta:pairPhi>>eta_phi_part","semilepFlag==1 && pairSemilepFlag==1");
+        qmsTuples[binCount]->Draw("pairEta:pairPhi>>eta_phi_part","semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14");
         EtaPhiPart->Scale(1/(*it),"width");
         qeEtaPhi->Add(EtaPhiPart);
 
         EtaPhiPart->Reset();
-        qmsTuples[binCount]->Draw("etaL:phiL>>eta_phi_part","semilepFlag==1 && pairSemilepFlag==1");
+        qmsTuples[binCount]->Draw("etaL:phiL>>eta_phi_part","semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14");
         EtaPhiPart->Scale(1/(*it),"width");
         qmEtaPhi->Add(EtaPhiPart);
 
+        EtaPhiDiffPart->Reset();
+        qmsTuples[binCount]->Draw("etaL-pairEta:phiL-pairPhi>>eta_phi_diff_part","semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14");
+        EtaPhiDiffPart->Scale(1/(*it),"width");
+        qmEtaPhiDiff->Add(EtaPhiDiffPart);
+
         EtaPtPart->Reset();
-        qmsTuples[binCount]->Draw("pairPt:pairEta>>eta_pt_part","semilepFlag==1 && pairSemilepFlag==1");
+        qmsTuples[binCount]->Draw("pairPt:pairEta>>eta_pt_part","semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14");
         EtaPtPart->Scale(1/(*it),"width");
         qeEtaPt->Add(EtaPtPart);
 
         EtaPtPart->Reset();
-        qmsTuples[binCount]->Draw("ptL:etaL>>eta_pt_part","semilepFlag==1 && pairSemilepFlag==1");
+        qmsTuples[binCount]->Draw("ptL:etaL>>eta_pt_part","semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14");
         EtaPtPart->Scale(1/(*it),"width");
         qmEtaPt->Add(EtaPtPart);
 
-        /* qe2DPartTheta->Reset();
-        qmsTuples[binCount]->Draw("pairTheta:thetaL>>qe_part_theta");
-        qe2DPartTheta->Scale(1/(*it),"width");
-        qe2DTheta->Add(qe2DPartTheta); */
+   
 
 
 
@@ -190,16 +185,10 @@ void read_sim_2D_emu() {
     cout<<"Total pairs: "<<pairTot<<endl;
     cout<<"Found pairs: "<<pairFoundTot<<endl;
 
-/*     cout<<endl;
-    cout<<"Total pairs: "<<pairTot<<endl;
-    cout<<"Found pairs: "<<pairFoundTot<<endl;
-    cout<<"Ratio: "<<pairFoundTot/pairTot<<endl;
-    cout<<"Pt pairs: "<<pairPtTot<<endl;
-    cout<<"Ratio Pt: "<<pairPtTot/pairTot<<endl; */
 
     ////Plotting
     // qes
-    TFile *outf =  new TFile("sim_hists_2D_emu_e1m3.root", "RECREATE");
+    TFile *outf =  new TFile("Hists/2D_emu_e1m3_xcut.root", "RECREATE");
 
     TCanvas *canvasQEAll = new TCanvas("qe_all","qe_all");
     canvasQEAll->Divide(3,1);
@@ -350,6 +339,13 @@ void read_sim_2D_emu() {
     qmEtaPt->Draw("colz");
 
     canvasQEAngles->Write();
+
+    TCanvas *canv = new TCanvas("canv","canv");
+
+    qmEtaPhiDiff->SetStats(0);
+    qmEtaPhiDiff->Draw("colz");
+
+    canv->Write();
 
 
     delete outf;

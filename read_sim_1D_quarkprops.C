@@ -9,7 +9,7 @@
 
 
 void read_sim_1D_quarkprops() {
-    TFile *f = TFile::Open("sim_tuples_quarks_individual_hardQCD.root","READ");
+    TFile *f = TFile::Open("Data/sim_tuples_136_semilep_quarks_individual.root","READ");
     
     
     vector<double> *binLuminocity;
@@ -28,8 +28,8 @@ void read_sim_1D_quarkprops() {
     int binCount = 0;
 
     //Create Hists
-    TH1F *qPt = new TH1F("q_full","Quark Transverse Momentum;#hat{p}_{T} (GeV/c);#frac{d#sigma}{d#hat{p}_{T}} (pb/GeV/c)", 50, 5.0, 60);
-    TH1F *qPtPart = new TH1F("q_pt_part","", 50, 5.0, 60);
+    TH1F *qPt = new TH1F("q_full","Quark Transverse Momentum;#hat{p}_{T} (GeV/c);#frac{d#sigma}{d#hat{p}_{T}} (pb/GeV/c)", 50, 14.0, 60);
+    TH1F *qPtPart = new TH1F("q_pt_part","", 50, 14.0, 60);
    
     TH1F *qEta = new TH1F("q_eta","Quark Pseudorapidity;#eta_{Q};#frac{d#sigma}{d#eta_{Q}}", 50, -6.0, 6.0);
     TH1F *qEtaCut = new TH1F("q_eta_cut","Quark Pseudorapidity (#hat{p}_{T}>10 GeV);#eta_{Q};#frac{d#sigma}{d#eta_{Q}}", 50, -6.0, 6.0);
@@ -55,12 +55,12 @@ void read_sim_1D_quarkprops() {
         //Electron Decays
       
         qPtPart->Reset();
-        qTuples[binCount]->Draw("ptHat>>q_pt_part");
+        qTuples[binCount]->Draw("ptHat>>q_pt_part","ptHat>=14");
         qPtPart->Scale(1/(*it),"width");
         qPt->Add(qPtPart);
 
         qEtaPart->Reset();
-        qTuples[binCount]->Draw("etaQ>>q_eta_part");
+        qTuples[binCount]->Draw("etaQ>>q_eta_part","ptHat>=14");
         qEtaPart->Scale(1/(*it),"width");
         qEta->Add(qEtaPart);
 
@@ -70,17 +70,17 @@ void read_sim_1D_quarkprops() {
         qEtaCut->Add(qEtaPart);
 
         qPhiPart->Reset();
-        qTuples[binCount]->Draw("phiQ>>q_phi_part");
+        qTuples[binCount]->Draw("phiQ>>q_phi_part","ptHat>=14");
         qPhiPart->Scale(1/(*it),"width");
         qPhi->Add(qPhiPart);
 
         qThetaPart->Reset();
-        qTuples[binCount]->Draw("thetaQ>>q_theta_part");
+        qTuples[binCount]->Draw("thetaQ>>q_theta_part","ptHat>=14");
         qThetaPart->Scale(1/(*it),"width");
         qTheta->Add(qThetaPart);
 
         EtaPtPart->Reset();
-        qTuples[binCount]->Draw("ptHat:etaQ>>eta_pt_part");
+        qTuples[binCount]->Draw("ptHat:etaQ>>eta_pt_part","ptHat>=14");
         EtaPtPart->Scale(1/(*it),"width");
         EtaPt->Add(EtaPtPart);
         
@@ -90,7 +90,7 @@ void read_sim_1D_quarkprops() {
 
     ////Plotting
     // qs
-    TFile *outf =  new TFile("sim_hists_1D_quarkprops.root", "RECREATE");
+    TFile *outf =  new TFile("Hists/1D_quarkprops_xcut.root", "RECREATE");
     TCanvas *canvasq = new TCanvas("q_sigma","q_sigma");
     canvasq->Divide(1,3);
     
@@ -98,17 +98,18 @@ void read_sim_1D_quarkprops() {
     qPt->SetLineColor(kBlack);
     qPt->SetStats(0);
     qPt->Draw();
+
+    canvasq->cd(2);
+    qPhi->SetLineColor(kBlack);
+    qPhi->SetStats(0);
+    qPhi->SetAxisRange(1e6,10e6,"Y");
+    qPhi->Draw();
     
     canvasq->cd(3);
     qEta->SetLineColor(kBlack);
     qEta->SetStats(0);
     qEta->Draw();
 
-    canvasq->cd(2);
-    qPhi->SetLineColor(kBlack);
-    qPhi->SetStats(0);
-    qPhi->SetAxisRange(100e6,150e6,"Y");
-    qPhi->Draw();
 
     /* canvasq->cd(4);
     qTheta->SetLineColor(kBlack);

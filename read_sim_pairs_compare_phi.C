@@ -9,8 +9,8 @@
 
 
 void read_sim_pairs_compare_phi() {
-    TFile *f = TFile::Open("sim_tuples_pairs_nocheck_hardQCD_calc.root","READ");
-    TFile *f2 = TFile::Open("sim_tuples_136_semilep_paircheck.root","READ");
+    TFile *f = TFile::Open("Data/sim_tuples_pairs_nocheck_hardQCD_lss.root","READ");
+    TFile *f2 = TFile::Open("Data/sim_tuples_136_semilep_paircheck_signs.root","READ");
 
     
     vector<double> *binLuminocity;
@@ -23,7 +23,7 @@ void read_sim_pairs_compare_phi() {
     vector<double> *weightSums2;
     vector<double> *sigmaGens2;
 
-    vector<TNtuple*> emuTuples(7); //should be count of bins but 7 is easier
+    vector<TNtuple*> emuTuples(4); //should be count of bins but 7 is easier
     vector<TNtuple*> qmsTuples(7);
 
     f->GetObject("luminocities",binLuminocity);
@@ -40,18 +40,19 @@ void read_sim_pairs_compare_phi() {
     int binCount2 = 0;
 
     //Create Hists
-    TH1F *emuPart = new TH1F("emu_part","", 19, 0, 2*M_PI);
-    TH1F *emuPhiDiff = new TH1F("emu_phi_diff",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 19, 0, 2*M_PI);
-    TH1F *emuPhiDiffCutLowEx = new TH1F("emu_phi_diff_cut_lowex",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 19, 0, 2*M_PI);
-    TH1F *emuPhiDiffCutLow = new TH1F("emu_phi_diff_cut_low",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 19, 0, 2*M_PI);
-    TH1F *emuPhiDiffCutHigh = new TH1F("emu_phi_diff_cut_high",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 19, 0, 2*M_PI);
+    TH1F *emuPart = new TH1F("emu_part","", 27, 0, 2*M_PI);
+    TH1F *emuPhiDiff = new TH1F("emu_phi_diff",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 27, 0, 2*M_PI);
+    TH1F *emuPhiDiffCutLowEx = new TH1F("emu_phi_diff_cut_lowex",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 27, 0, 2*M_PI);
+    TH1F *emuPhiDiffCutLow = new TH1F("emu_phi_diff_cut_low",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 27, 0, 2*M_PI);
+    TH1F *emuPhiDiffCutHigh = new TH1F("emu_phi_diff_cut_high",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 27, 0, 2*M_PI);
 
-    TH1F *emuPartSL = new TH1F("SLemu_part","", 19, 0, 2*M_PI);
-    TH1F *emuPhiDiffSL = new TH1F("SLemu_phi_diff",";#Delta #phi;", 19, 0, 2*M_PI);
-    TH1F *emuPhiDiffCutLowExSL = new TH1F("SLemu_phi_diff_cut_lowex",";#Delta #phi;", 19, 0, 2*M_PI);
-    TH1F *emuPhiDiffCutLowSL = new TH1F("SLemu_phi_diff_cut_low",";#Delta #phi;", 19, 0, 2*M_PI);
-    TH1F *emuPhiDiffCutHighSL = new TH1F("SLemu_phi_diff_cut_high",";#Delta #phi;", 19, 0, 2*M_PI);
-   
+    TH1F *emuPartSL = new TH1F("SLemu_part","", 27, 0, 2*M_PI);
+    TH1F *emuPhiDiffSL = new TH1F("SLemu_phi_diff",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 27, 0, 2*M_PI);
+    TH1F *emuPhiDiffCutLowExSL = new TH1F("SLemu_phi_diff_cut_lowex",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 27, 0, 2*M_PI);
+    TH1F *emuPhiDiffCutLowSL = new TH1F("SLemu_phi_diff_cut_low",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 27, 0, 2*M_PI);
+    TH1F *emuPhiDiffCutHighSL = new TH1F("SLemu_phi_diff_cut_high",";#Delta #phi;#frac{d#sigma}{d#Delta#phi}", 27, 0, 2*M_PI);
+    
+    
 
     for(std::vector<double>::iterator it = binLuminocity->begin(); it != binLuminocity->end(); ++it){
         cout<<*it<<endl;
@@ -63,22 +64,22 @@ void read_sim_pairs_compare_phi() {
     
 
         emuPart->Reset();
-        emuTuples[binCount]->Draw("phiDiff>>emu_part");
+        emuTuples[binCount]->Draw("phiDiff>>emu_part","((etaE-etaMu)>=1.6 || (etaE-etaMu)<=-1.6)");
         emuPart->Scale(1/(*it), "width");
         emuPhiDiff->Add(emuPart); 
 
         emuPart->Reset();
-        emuTuples[binCount]->Draw("phiDiff>>emu_part","ptE>0.5 && ptMu>1");// && etaMu<-2.5 && etaMu>-4
+        emuTuples[binCount]->Draw("phiDiff>>emu_part");// && etaMu<-2.5 && etaMu>-4
         emuPart->Scale(1/(*it), "width");
         emuPhiDiffCutLowEx->Add(emuPart);
 
         emuPart->Reset();
-        emuTuples[binCount]->Draw("phiDiff>>emu_part","ptE>1 && ptMu>3");// && etaMu<-2.5 && etaMu>-4
+        emuTuples[binCount]->Draw("phiDiff>>emu_part","ptE>=1 && ptMu>=3 && ((etaE-etaMu)>=1.6 || (etaE-etaMu)<=-1.6)");// && etaMu<-2.5 && etaMu>-4
         emuPart->Scale(1/(*it), "width");
         emuPhiDiffCutLow->Add(emuPart);
 
         emuPart->Reset();
-        emuTuples[binCount]->Draw("phiDiff>>emu_part","ptE>3 && ptMu>5");// && etaMu<-2.5 && etaMu>-4
+        emuTuples[binCount]->Draw("phiDiff>>emu_part","ptE>=3 && ptMu>=5 && ((etaE-etaMu)>=1.6 || (etaE-etaMu)<=-1.6)");// && etaMu<-2.5 && etaMu>-4
         emuPart->Scale(1/(*it), "width");
         emuPhiDiffCutHigh->Add(emuPart);
 
@@ -97,22 +98,22 @@ void read_sim_pairs_compare_phi() {
     
 
         emuPartSL->Reset();
-        qmsTuples[binCount2]->Draw("dPhi>>SLemu_part","semilepFlag==1 && pairSemilepFlag==1");
+        qmsTuples[binCount2]->Draw("dPhi>>SLemu_part","semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14 && ((pairEta-etaL)>=1 || (pairEta-etaL)<=-1)");
         emuPartSL->Scale(1/(*it), "width");
         emuPhiDiffSL->Add(emuPartSL); 
 
         emuPartSL->Reset();
-        qmsTuples[binCount2]->Draw("dPhi>>SLemu_part","pairPt>0.5 && ptL>1 && semilepFlag==1 && pairSemilepFlag==1");// && etaL<-2.5 && etaL>-4
+        qmsTuples[binCount2]->Draw("dPhi>>SLemu_part","pairPt>=0.5 && ptL>=1 && semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14 && ((pairEta-etaL)>=1.6 || (pairEta-etaL)<=-1.6)");// && etaL<-2.5 && etaL>-4
         emuPartSL->Scale(1/(*it), "width");
         emuPhiDiffCutLowExSL->Add(emuPartSL);
 
         emuPartSL->Reset();
-        qmsTuples[binCount2]->Draw("dPhi>>SLemu_part","pairPt>1 && ptL>3 && semilepFlag==1 && pairSemilepFlag==1");// && etaL<-2.5 && etaL>-4
+        qmsTuples[binCount2]->Draw("dPhi>>SLemu_part","pairPt>=1 && ptL>=3 && semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14 && ((pairEta-etaL)>=1.6 || (pairEta-etaL)<=-1.6)");// && etaL<-2.5 && etaL>-4
         emuPartSL->Scale(1/(*it), "width");
         emuPhiDiffCutLowSL->Add(emuPartSL);
 
         emuPartSL->Reset();
-        qmsTuples[binCount2]->Draw("dPhi>>SLemu_part","pairPt>3 && ptL>5 && semilepFlag==1 && pairSemilepFlag==1");// && etaL<-2.5 && etaL>-4
+        qmsTuples[binCount2]->Draw("dPhi>>SLemu_part","pairPt>=3 && ptL>=5 && semilepFlag==1 && pairSemilepFlag==1 && ptHat>=14 && ((pairEta-etaL)>=1.6 || (pairEta-etaL)<=-1.6)");// && etaL<-2.5 && etaL>-4
         emuPartSL->Scale(1/(*it), "width");
         emuPhiDiffCutHighSL->Add(emuPartSL);
     
@@ -126,33 +127,36 @@ void read_sim_pairs_compare_phi() {
 
     ////Plotting
     // emus
-    TFile *outf =  new TFile("A_phi_compare.root", "RECREATE");
+    TFile *outf =  new TFile("Hists/phi_compare_hftest_eta16.root", "RECREATE");
     TCanvas *canvasCutsNC = new TCanvas("emu_cutsnc","emu_cutsnc");
     canvasCutsNC->Divide(1,3);
 
     canvasCutsNC->cd(1);
     emuPhiDiffSL->SetLineColor(kBlack);
+    emuPhiDiff->SetAxisRange(0,220e3,"Y");
     emuPhiDiffSL->SetStats(0);
     emuPhiDiffSL->Draw(); 
 
     canvasCutsNC->cd(2);
     emuPhiDiffCutLowSL->SetLineColor(kBlack);
+    emuPhiDiffCutLowSL->SetAxisRange(0,60e3,"Y");
     emuPhiDiffCutLowSL->SetStats(0);
     emuPhiDiffCutLowSL->Draw(); 
 
     auto label1nc = new TLatex();
-    label1nc->DrawLatex(0.0, 0.0, "p_{T}^{e} > 1 GeV");
-    label1nc->DrawLatex(0.0, 0.0, "p_{T}^{#mu} > 3 GeV");
+    label1nc->DrawLatex(0.0, 0.0, "p_{T}^{e} #geq 1 GeV");
+    label1nc->DrawLatex(0.0, 0.0, "p_{T}^{#mu} #geq 3 GeV");
     label1nc->Draw("SAME"); 
 
     canvasCutsNC->cd(3);
     emuPhiDiffCutHighSL->SetLineColor(kBlack);
+    emuPhiDiffCutHighSL->SetAxisRange(0,15e3,"Y");
     emuPhiDiffCutHighSL->SetStats(0);
     emuPhiDiffCutHighSL->Draw(); 
 
     auto label2nc = new TLatex();
-    label2nc->DrawLatex(0.0, 0.0, "p_{T}^{e} > 3 GeV");
-    label2nc->DrawLatex(0.0, 0.0, "p_{T}^{#mu} > 5 GeV");
+    label2nc->DrawLatex(0.0, 0.0, "p_{T}^{e} #geq 3 GeV");
+    label2nc->DrawLatex(0.0, 0.0, "p_{T}^{#mu} #geq 5 GeV");
     label2nc->Draw("SAME"); 
 
     canvasCutsNC->Write();
@@ -187,8 +191,8 @@ void read_sim_pairs_compare_phi() {
     emuPhiDiffCutLowExSL->Draw("SAME");
 
     auto label1ex = new TLatex();
-    label1ex->DrawLatex(0.0, 0.0, "p_{T}^{e} > 0.5 GeV");
-    label1ex->DrawLatex(0.0, 0.0, "p_{T}^{#mu} > 1 GeV");
+    label1ex->DrawLatex(0.0, 0.0, "p_{T}^{e} #geq 0.5 GeV");
+    label1ex->DrawLatex(0.0, 0.0, "p_{T}^{#mu} #geq 1 GeV");
     label1ex->Draw("SAME"); 
 
     auto legend1ex = new TLegend();
@@ -208,8 +212,8 @@ void read_sim_pairs_compare_phi() {
     emuPhiDiffCutLowSL->Draw("SAME"); 
 
     auto label1 = new TLatex();
-    label1->DrawLatex(0.0, 0.0, "p_{T}^{e} > 1 GeV");
-    label1->DrawLatex(0.0, 0.0, "p_{T}^{#mu} > 3 GeV");
+    label1->DrawLatex(0.0, 0.0, "p_{T}^{e} #geq 1 GeV");
+    label1->DrawLatex(0.0, 0.0, "p_{T}^{#mu} #geq 3 GeV");
     label1->Draw("SAME"); 
 
     auto legend1 = new TLegend();
@@ -230,8 +234,8 @@ void read_sim_pairs_compare_phi() {
     emuPhiDiffCutHighSL->Draw("SAME"); 
 
     auto label2 = new TLatex();
-    label2->DrawLatex(0.0, 0.0, "p_{T}^{e} > 3 GeV");
-    label2->DrawLatex(0.0, 0.0, "p_{T}^{#mu} > 5 GeV");
+    label2->DrawLatex(0.0, 0.0, "p_{T}^{e} #geq 3 GeV");
+    label2->DrawLatex(0.0, 0.0, "p_{T}^{#mu} #geq 5 GeV");
     label2->Draw("SAME"); 
 
     auto legend2 = new TLegend();

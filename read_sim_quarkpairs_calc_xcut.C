@@ -7,10 +7,10 @@
 
 //script to plot the reduced cross section and subsequent luminosity 
 
-void read_sim_quarkpairs_calc() {
+void read_sim_quarkpairs_calc_xcut() {
     TFile *f = TFile::Open("Data/sim_tuples_136_semilep_quarks_pairprod.root","READ");
-    TFile *f_events = TFile::Open("Hists/quarkpairs_full.root","READ");
-    TFile *f_quarks = TFile::Open("Hists/cuts_all_e3m5.root","READ");
+    TFile *f_events = TFile::Open("Hists/quarkpairs_full_xcut.root","READ");
+    TFile *f_quarks = TFile::Open("Hists/cuts_all_e3m5_xcut.root","READ");
 
     
     vector<double> *binLuminocity;
@@ -25,9 +25,9 @@ void read_sim_quarkpairs_calc() {
     int binCount = 0;
 
     //Create Hists
-    TH1F *quarkPtTotal2 = new TH1F("hf_full_2","Events with Q#bar{Q} pairs detectable as e-#mu pairs;#hat{p}_{T} (GeV/c);#frac{d#sigma}{d#hat{p}_{T}} (pb/GeV/c)", 20, 5.0, 60.0);
-    TH1F *quarkPtPart = new TH1F("quark_pt_part","", 20, 5.0, 60.0);
-    TH1F *quarkPtLum = new TH1F("hf_lum","Events with Q#bar{Q} pairs detectable as e-#mu pairs;#hat{p}_{T} (GeV/c);#frac{N_{ev}}{year}", 20, 5.0, 60.0);
+    TH1F *quarkPtTotal2 = new TH1F("hf_full_2","Events with Q#bar{Q} pairs detectable as e-#mu pairs;#hat{p}_{T} (GeV/c);#frac{d#sigma}{d#hat{p}_{T}} (pb/GeV/c)", 20, 14.0, 60.0);
+    TH1F *quarkPtPart = new TH1F("quark_pt_part","", 20, 14.0, 60.0);
+    TH1F *quarkPtLum = new TH1F("hf_lum","Events with Q#bar{Q} pairs detectable as e-#mu pairs;#hat{p}_{T} (GeV/c);#frac{N_{ev}}{year}", 20, 14.0, 60.0);
 
 
     TH1F* fullEvents = (TH1F*) f_events->Get("hf_full");
@@ -43,9 +43,19 @@ void read_sim_quarkpairs_calc() {
     quarkPtTotal2->Scale(0.093); //scale for quark parents in eta range
     //quarkPtTotal2->Scale(0.11, "width");
 
+  /*   cout<<"!!! "<<fullEvents->GetBinContent(0)*ratioEvents->GetBinContent(0)*ratioQE->GetBinContent(0)*ratioQM->GetBinContent(0)<<endl;
+    double sumcs = 0;
+    for(int i = 0; i <= 21; i++)
+    {
+        sumcs+=quarkPtTotal2->GetBinContent(i);
+        cout<<quarkPtTotal2->GetBinContent(i)<<endl;
+    }
+
+    cout<<"Sum: "<<sumcs<<endl; */
+
     ////Plotting
     // Quarks
-    TFile *outf =  new TFile("Hists/reduced_cs_e3m5.root", "RECREATE");
+    TFile *outf =  new TFile("Hists/reduced_cs_e3m5_xcut.root", "RECREATE");
 
     TCanvas *canvasQuark2 = new TCanvas("Quark_sigma1","Quark_sigma1");
     quarkPtTotal2->SetLineColor(kRed);
@@ -53,8 +63,8 @@ void read_sim_quarkpairs_calc() {
     quarkPtTotal2->Draw();
     
     auto label0 = new TLatex();
-    label0->DrawLatex(0.0, 0.0, "p_{T}^{#mu} #geq 3 GeV");
-    label0->DrawLatex(0.0, 0.0, "p_{T}^{e} #geq 1 GeV");
+    label0->DrawLatex(0.5, 0.5, "p_{T}^{#mu} #geq 5 GeV");
+    label0->DrawLatex(0.5, 0.5, "p_{T}^{e} #geq 3 GeV");
     label0->Draw("SAME"); 
 
     canvasQuark2->Write();
@@ -80,8 +90,8 @@ void read_sim_quarkpairs_calc() {
     Double_t integral_lum = quarkPtLum->IntegralAndError(0,20,error_lum,"width");
     cout<<"Total Events (Integral): "<<integral_lum<<" +- "<<error_lum<<endl;
 
-/*     double sum = 0;
-    for(int i = 0; i <= 20; i++)
+    /* double sum = 0;
+    for(int i = 0; i <= 21; i++)
     {
         sum+=quarkPtLum->GetBinContent(i);
         cout<<quarkPtLum->GetBinContent(i)<<endl;
@@ -90,10 +100,11 @@ void read_sim_quarkpairs_calc() {
     cout<<"Sum: "<<sum<<endl; */
 
     auto label = new TLatex();
-    label->DrawLatex(0.0, 0.0, "Integrated N_{ev}/year:");
-    label->DrawLatex(0.0, 0.0, "166.1 #pm 1.5");
-    label->DrawLatex(0.0, 0.0, "p_{T}^{#mu} #geq 5 GeV");
-    label->DrawLatex(0.0, 0.0, "p_{T}^{e} #geq 3 GeV");
+    label->DrawLatex(3.0, 5.0, "Integrated N_{ev}/year:");
+    //label->DrawLatex(3.0, 5.0, "1557 #pm 13");
+    label->DrawLatex(3.0, 5.0, "142.6 #pm 1.2");
+    label->DrawLatex(3.0, 5.0, "p_{T}^{#mu} #geq 5 GeV");
+    label->DrawLatex(3.0, 5.0, "p_{T}^{e} #geq 3 GeV");
     label->Draw("SAME"); 
 
     
